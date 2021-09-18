@@ -10,6 +10,9 @@ import Vue from "vue";
 import App from "./App";
 import router from "./router";
 import store from "./store";
+
+import "@/icons"; // icon svg图标
+
 import "@/styles/common/index.scss";
 import "@/styles/index.scss"; // global css
 

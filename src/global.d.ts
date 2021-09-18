@@ -7,14 +7,12 @@ interface AnyObj {
   [key: string]: any;
 }
 interface Window {
+  /** 当前系统的eventBus */
   eventBus: Vue;
+  /** qiankun应用的事件bus */
   appEventBus?: Vue;
-  VUE_APP_WS_URI: string;
-  /** 全局的云际会议的js核心 */
-  PexRTC?: any;
   /** 是否已启动qiankun */
   qiankunStarted: boolean;
-  __POWERED_BY_QIANKUN__: boolean; // 是否是qiankun微服务
 }
 
 interface Date {

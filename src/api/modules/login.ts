@@ -1,6 +1,7 @@
 // import MD5 from 'crypto-js/md5'
 import axios from "axios";
 import request from "@/api/request";
+import StoreUser from "@/store/modules/user";
 
 /** 通过code登录 */
 export function loginByCode(code: string, state: string) {
@@ -36,7 +37,7 @@ export function updatePwdByCode(phone) {
 
 /** 校验token是否失效 */
 export function checkToken() {
-  return request.get(`/oauth/v1/checkToken`);
+  return axios.get(`/oauth/v1/checkToken`, { headers: { accessToken: StoreUser.token } });
 }
 
 /** 登出 */

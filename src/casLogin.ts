@@ -44,10 +44,13 @@ export default async function casLogin() {
     if (!token) {
       token = await StoreUser.RE_LOADUSER();
     }
-    // TODO: 调用后台接口校验token是否已失效
-    // }
+    const { data } = await checkToken();
+    if (data.code !== 200) {
+      return Promise.reject(data);
+    }
   } catch (error) {
     console.error(error);
+    return Promise.reject(error);
     // console.log(error)
     // const canLogin = false //默认去到登录页
     // if (process.env.NODE_ENV === 'development' || canLogin) {
@@ -55,6 +58,4 @@ export default async function casLogin() {
     //   return Promise.resolve()
     // }
   }
-  const res = await checkToken();
-  return res;
 }

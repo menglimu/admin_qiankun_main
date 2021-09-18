@@ -11,7 +11,7 @@ import App from "./App";
 import router from "./router";
 import store from "./store";
 import("@ml/ml-components/dist/style.css");
-import "@/icons"; // icon svg图标
+// import "@/icons"; // icon svg图标
 // import "@/directives"; // 指令
 
 import "@/styles/index.scss"; // global css
@@ -20,6 +20,11 @@ import { QKProps } from "./main";
 Vue.config.productionTip = false;
 // 初始化vue
 export async function render(props: QKProps) {
+  // 在这里用await 防止公共样式没加载。页面就展示
+  // 微服务启动的时候，公共样式从主应用引入
+  if (process.env?.VUE_APP_QIANKUN === "0") {
+    await import("@/styles/common/index.scss");
+  }
   const container = props?.container;
   return new Vue({
     router,

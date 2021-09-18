@@ -10,48 +10,45 @@ import Vue from "vue";
 import App from "./App";
 import router from "./router";
 import store from "./store";
-import("@ml/ml-components/dist/style.css");
-// import "@/icons"; // icon svg图标
-// import "@/directives"; // 指令
-
+import "@/styles/common/index.scss";
 import "@/styles/index.scss"; // global css
-import { QKProps } from "./main";
-
-Vue.config.productionTip = false;
-// 初始化vue
-export async function render(props: QKProps) {
-  // 在这里用await 防止公共样式没加载。页面就展示
-  // 微服务启动的时候，公共样式从主应用引入
-  if (process.env?.VUE_APP_QIANKUN === "0") {
-    await import("@/styles/common/index.scss");
-  }
-  const container = props?.container;
-  return new Vue({
-    router,
-    store,
-    render: h => h(App)
-  }).$mount(container ? container.querySelector("#app") : "#app");
-}
 
 window.eventBus = window.eventBus || new Vue(); // eventBus
 window.appEventBus = window.appEventBus || new Vue(); // appEventBus
 
-// 给Date原型增加方法
-// eslint-disable-next-line no-extend-native
-Date.prototype.Format = function(fmt = "yyyy-MM-dd hh:mm:ss") {
-  let fmt_ = fmt;
-  const o = {
-    "M+": this.getMonth() + 1, // 月份
-    "d+": this.getDate(), // 日
-    "h+": this.getHours(), // 小时
-    "m+": this.getMinutes(), // 分
-    "s+": this.getSeconds(), // 秒
-    "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
-    S: this.getMilliseconds() // 毫秒
-  };
-  if (/(y+)/.test(fmt_)) fmt_ = fmt_.replace(RegExp.$1, String(this.getFullYear()).substr(4 - RegExp.$1.length));
-  for (const k in o)
-    if (new RegExp("(" + k + ")").test(fmt_))
-      fmt_ = fmt_.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(String(o[k]).length));
-  return fmt_;
-};
+import {
+  Dialog,
+  Menu,
+  Submenu,
+  MenuItem,
+  Input,
+  Button,
+  Breadcrumb,
+  BreadcrumbItem,
+  Tabs,
+  TabPane,
+  Scrollbar
+} from "element-ui";
+Vue.use(Dialog)
+  .use(Menu)
+  .use(Submenu)
+  .use(MenuItem)
+  .use(Input)
+  .use(Button)
+  .use(Breadcrumb)
+  .use(BreadcrumbItem)
+  .use(Tabs)
+  .use(TabPane)
+  .use(Input)
+  .use(Scrollbar);
+
+Vue.config.productionTip = false;
+// 初始化vue
+export async function render() {
+  return new Vue({
+    router,
+    store,
+    render: h => h(App)
+  }).$mount("#app");
+}
+render();

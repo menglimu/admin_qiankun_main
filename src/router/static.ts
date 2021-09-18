@@ -4,19 +4,14 @@ import { FunItem } from "./permission";
 export const staticRoutes: FunItem[] = [
   {
     id: createRandomId(),
-    text: "外链",
-    url: "https://www.baidu.com"
-  },
-  {
-    id: createRandomId(),
-    text: "首页",
-    url: "/home"
-  },
-  {
-    id: createRandomId(),
     text: "考核管理",
     url: "",
     children: [
+      {
+        id: createRandomId(),
+        text: "首页",
+        url: "/home"
+      },
       {
         id: createRandomId(),
         text: "cache缓存",

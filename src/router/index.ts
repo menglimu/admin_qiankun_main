@@ -5,8 +5,6 @@ import Vue from "vue";
 import Router from "vue-router";
 import NProgress from "nprogress"; // Progress 进度条
 import "nprogress/nprogress.css"; // Progress 进度条样式
-import StoreApp from "@/store/modules/app";
-import { getMenuById } from "@/layout/common";
 
 Vue.use(Router);
 

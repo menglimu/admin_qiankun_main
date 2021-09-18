@@ -18,7 +18,9 @@ import "@/styles/index.scss"; // global css
 
 window.eventBus = window.eventBus || new Vue(); // eventBus
 window.appEventBus = window.appEventBus || new Vue(); // appEventBus
-
+declare module "element-ui" {
+  export const Scrollbar: any;
+}
 import {
   Dialog,
   Menu,

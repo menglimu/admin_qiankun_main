@@ -1,5 +1,6 @@
 import { registerMicroApps, start } from "qiankun";
 import router from "@/router";
+import StoreUser from "./store/modules/user";
 // import { initGlobalState, MicroAppStateActions } from 'qiankun'
 
 const apps = [
@@ -31,8 +32,8 @@ registerMicroApps(
     props: {
       appBaseurl: process.env.VUE_APP_BASEURL,
       appName: process.env.VUE_APP_NAME,
-      userInfo: getUser(),
-      accessToken: getToken()
+      userInfo: StoreUser.userInfo,
+      accessToken: StoreUser.token
     }
   }))
 );

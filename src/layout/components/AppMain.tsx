@@ -5,6 +5,7 @@ import StoreApp from "@/store/modules/app";
 import Vue from "vue";
 import { getMenuById } from "../common";
 import styles from "../index.module.scss";
+import { start } from "qiankun";
 
 export default Vue.extend({
   name: "AppMain",
@@ -13,6 +14,13 @@ export default Vue.extend({
   },
   created() {
     this.$watch("$route", this.destroyNoCache, { immediate: true });
+  },
+  mounted() {
+    // 启动qiankun
+    if (!window.qiankunStarted) {
+      window.qiankunStarted = true;
+      start();
+    }
   },
   methods: {
     destroyNoCache() {
@@ -36,7 +44,7 @@ export default Vue.extend({
     return (
       <transition name="fade-transform" mode="out-in">
         <keep-alive>
-          <router-view class={styles.main} key={this.$route.name} pageId={this.$route.name} />
+          <router-view class={[styles.main, "container-page"]} key={this.$route.name} pageId={this.$route.name} />
         </keep-alive>
       </transition>
     );

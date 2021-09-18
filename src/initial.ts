@@ -10,17 +10,12 @@ import Vue from "vue";
 import App from "./App";
 import router from "./router";
 import store from "./store";
-import mlComponents from "@ml/ml-components";
 import("@ml/ml-components/dist/style.css");
-import elementUi from "element-ui";
 import "@/icons"; // icon svg图标
 // import "@/directives"; // 指令
 
 import "@/styles/index.scss"; // global css
 import { QKProps } from "./main";
-
-// TODO: 先通过zindex展示处理嵌套到主应用中的层级问题。后面考虑使用主应用和子应用共享同一elementUI框架
-Vue.use(elementUi, { size: "small", zIndex: 3000 }).use(mlComponents);
 
 Vue.config.productionTip = false;
 // 初始化vue
@@ -34,6 +29,7 @@ export async function render(props: QKProps) {
 }
 
 window.eventBus = window.eventBus || new Vue(); // eventBus
+window.appEventBus = window.appEventBus || new Vue(); // appEventBus
 
 // 给Date原型增加方法
 // eslint-disable-next-line no-extend-native
@@ -53,18 +49,4 @@ Date.prototype.Format = function(fmt = "yyyy-MM-dd hh:mm:ss") {
     if (new RegExp("(" + k + ")").test(fmt_))
       fmt_ = fmt_.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(String(o[k]).length));
   return fmt_;
-};
-
-// 重写c-ui的 confirm 修改默认提示的样式
-const baseConfirm = Vue.prototype.$confirm;
-Vue.prototype.$confirm = function(...params) {
-  if (params.length === 1) {
-    return baseConfirm(params[0], "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning"
-    });
-  } else {
-    return baseConfirm(...params);
-  }
 };

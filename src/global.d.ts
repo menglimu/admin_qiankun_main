@@ -12,6 +12,8 @@ interface Window {
   VUE_APP_WS_URI: string;
   /** 全局的云际会议的js核心 */
   PexRTC?: any;
+  /** 是否已启动qiankun */
+  qiankunStarted: boolean;
   __POWERED_BY_QIANKUN__: boolean; // 是否是qiankun微服务
 }
 

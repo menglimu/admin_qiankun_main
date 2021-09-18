@@ -7,7 +7,7 @@ import { GetQueryString } from "./utils";
 // 是否使用 cas 认证
 const isCasLogin = process.env.VUE_APP_CAS === "1";
 
-export default async function casLogin(props) {
+export default async function casLogin() {
   if (window.location.href.includes("/login")) {
     return;
   }
@@ -19,11 +19,6 @@ export default async function casLogin(props) {
   }
 
   try {
-    if (window.__POWERED_BY_QIANKUN__) {
-      await StoreUser.TokenUserLogin(props);
-      return;
-    }
-
     // 不是qiankun的时候。在进行浏览器上参数的处理
     // 如果有初始链接中有code,则去取用户信息,如果没有则读取本地
     const code = GetQueryString("code");

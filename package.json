@@ -1,5 +1,5 @@
 {
-  "name": "admin_qiankun_sub",
+  "name": "admin_qiankun_main",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,6 +21,7 @@
     "element-ui": "^2.15.2",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
+    "qiankun": "^2.4.10",
     "screenfull": "^5.1.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

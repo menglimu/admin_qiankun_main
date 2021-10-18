@@ -25,10 +25,11 @@ export class Storage {
 
   public set(key: string, value: any) {
     if (!key) return;
-    if (Object.prototype.toString.call(value) === "[object Object]") {
-      value = JSON.stringify(value);
+    let value_ = value;
+    if (Object.prototype.toString.call(value_) === "[object Object]") {
+      value_ = JSON.stringify(value_);
     }
-    window.localStorage.setItem(this.privatePreKey + key, value);
+    window.localStorage.setItem(this.privatePreKey + key, value_);
   }
 
   public remove(key: string) {

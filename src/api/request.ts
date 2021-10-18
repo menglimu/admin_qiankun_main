@@ -50,7 +50,7 @@ service.interceptors.response.use(
       const { code, data, status } = res.data;
       if (code === 200 || status) {
         return data;
-      } else if (code === 401 && router?.currentRoute?.fullPath !== "/login") {
+      } else if (code === 401 && router?.currentRoute?.path !== "/login") {
         const msg = "你已被登出，可以取消继续留在该页面，或者重新登录";
         if (!alerted) {
           alerted = true;

@@ -1,19 +1,19 @@
-import { updatePwdByCode } from '@/api/modules/login';
-import { REGS } from '@/utils/validate';
-import { MlForm, MlFormConfig } from '@ml/ml-components/types/form';
-import Vue from 'vue';
-import Vcode from './vcode';
+import { updatePwdByCode } from "@/api/modules/login";
+import { REGS } from "@/utils/validate";
+import { MlForm, MlFormConfig } from "@ml/ml-components/types/form";
+import Vue from "vue";
+import Vcode from "./vcode";
 
 export default Vue.extend({
-  name: 'ForgetPassword',
+  name: "ForgetPassword",
   props: { phone: String },
   data() {
     return {
       editConfig: null as MlFormConfig,
       editValue: {
-        userAccount: '',
-        verifyCode: '',
-        newPassword: ''
+        userAccount: "",
+        verifyCode: "",
+        newPassword: ""
       },
       isShow: false
     };
@@ -21,26 +21,26 @@ export default Vue.extend({
   created() {
     this.editConfig = {
       inline: false,
-      labelWidth: '80px',
+      labelWidth: "80px",
       columns: [
-        { label: '账号', prop: 'userAccount', required: true, placeholder: '请输入手机号', reg: REGS.phone },
+        { label: "账号", prop: "userAccount", required: true, placeholder: "请输入手机号", reg: REGS.phone },
         {
-          label: '验证码',
-          prop: 'verifyCode',
+          label: "验证码",
+          prop: "verifyCode",
           required: true,
           render: () => <Vcode disabled={!this.editValue?.userAccount} phone={this.editValue?.userAccount} />
         },
         {
-          label: '新密码',
+          label: "新密码",
           required: true,
-          prop: 'newPassword',
-          placeholder: '请输入6-8位数字或字母',
+          prop: "newPassword",
+          placeholder: "请输入6-8位数字或字母",
           attrs: { maxlength: 8 },
-          props: { 'show-word-limit': true },
+          props: { "show-word-limit": true },
           nodeData: {
             on: {
               input: value => {
-                this.editValue.newPassword = value.replace(/[^a-zA-Z1-9]/g, '');
+                this.editValue.newPassword = value.replace(/[^a-zA-Z1-9]/g, "");
               }
             }
           }
@@ -63,7 +63,7 @@ export default Vue.extend({
       const form = this.$refs.form as MlForm;
       await form.validate();
       await updatePwdByCode(this.editValue);
-      this.$message.success('修改成功');
+      this.$message.success("修改成功");
       this.onCancel();
     }
   },

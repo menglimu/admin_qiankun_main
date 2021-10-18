@@ -2,20 +2,34 @@
  * @Author: wenlin
  * @Description: 顶部页签
  */
-import { getMenuById, goLink } from "@/layout/common";
+import { getActiveMenu, getMenuById, goLink } from "@/layout/common";
+import { MenuItem } from "@/router/permission";
 import StoreApp from "@/store/modules/app";
 import Vue from "vue";
+import { VNode } from "vue/types/umd";
 import "./index.scss";
 
 export default Vue.extend({
   name: "TagsView",
+  data() {
+    return { activeMenu: null as MenuItem };
+  },
+  created() {
+    this.$watch(
+      "$route",
+      () => {
+        this.activeMenu = getActiveMenu();
+      },
+      { immediate: true }
+    );
+  },
   methods: {
     handleRouteJump({ name }) {
       const menu = getMenuById(name);
       goLink(menu);
     },
     removeTag(name: string) {
-      if (name === this.$route.name) {
+      if (name === this.activeMenu.id) {
         const index = StoreApp.cachedTags.findIndex(item => item.id === name);
         const id = StoreApp.cachedTags[index + 1]?.id || StoreApp.cachedTags[index - 1]?.id;
         if (id) {
@@ -29,7 +43,7 @@ export default Vue.extend({
     },
 
     hideTagsView() {
-      const menu = getMenuById(this.$route.name);
+      const menu = this.activeMenu;
       if (StoreApp.isTopMenu && !StoreApp.sidebarMenus?.length) {
         return true;
       }
@@ -49,11 +63,11 @@ export default Vue.extend({
     }
   },
   //
-  render(this: any) {
+  render(): VNode {
     return this.hideTagsView() ? null : (
       <el-tabs
         ref="tabs"
-        value={this.$route.name}
+        value={this.activeMenu.id}
         type="card"
         closable
         class={["tagsView"]}

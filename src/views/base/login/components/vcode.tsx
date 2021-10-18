@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import { getCode } from '@/api/modules/login';
-import { REGS } from '@/utils/validate';
+import Vue from "vue";
+import { getCode } from "@/api/modules/login";
+import { REGS } from "@/utils/validate";
 export default Vue.extend({
-  name: 'Vcode',
+  name: "Vcode",
   props: { value: String, disabled: Boolean, phone: String },
   data() {
     return {
@@ -14,11 +14,11 @@ export default Vue.extend({
   methods: {
     async onGetCode() {
       if (!REGS.phone.test(this.phone)) {
-        this.$message.error('请填写正确的手机号');
+        this.$message.error("请填写正确的手机号");
         return;
       }
       await getCode(this.phone);
-      this.$message.success('发送验证码成功');
+      this.$message.success("发送验证码成功");
       this.getting = true;
       this.timer = setInterval(() => {
         if (this.time === 0) {
@@ -31,7 +31,7 @@ export default Vue.extend({
       }, 1000);
     },
     onInput(value) {
-      this.$emit('input', value.replace(/[^1-9]/g, ''));
+      this.$emit("input", value.replace(/[^1-9]/g, ""));
     }
   },
   render() {
@@ -52,7 +52,7 @@ export default Vue.extend({
           disabled={this.disabled || this.getting}
           onClick={this.onGetCode}
         >
-          {this.getting ? `获取验证码(${this.time})` : '获取验证码'}
+          {this.getting ? `获取验证码(${this.time})` : "获取验证码"}
         </el-button>
       </div>
     );

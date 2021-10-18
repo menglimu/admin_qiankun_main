@@ -1,6 +1,6 @@
 import { checkToken } from "./api/modules/login";
 import StoreUser from "./store/modules/user";
-import { GetQueryString } from "./utils";
+import { GetQueryString, urlDelete, urlQuery } from "./utils";
 
 /* 单点登录未完成 */
 
@@ -21,22 +21,22 @@ export default async function casLogin() {
   try {
     // 不是qiankun的时候。在进行浏览器上参数的处理
     // 如果有初始链接中有code,则去取用户信息,如果没有则读取本地
-    const code = GetQueryString("code");
-    const username = GetQueryString("username");
-    const password = GetQueryString("password");
-    const accessToken = GetQueryString("access_token") || GetQueryString("accessToken");
+    const code = urlQuery("code");
+    const username = urlQuery("username");
+    const password = urlQuery("password");
+    const accessToken = urlQuery("accessToken");
     if (code) {
-      const state = GetQueryString("state");
+      const state = urlQuery("state");
       await StoreUser.CasLogin({ code, state });
-      location.href = location.origin + process.env.BASE_URL + "#/";
+      location.href = urlDelete("code");
       return;
     } else if (username && password) {
       await StoreUser.Login({ username, password });
-      location.href = location.origin + process.env.BASE_URL + "#/";
+      location.href = urlDelete("username", urlDelete("password"));
       return;
-    } else if (accessToken) {
+    } else if (accessToken && typeof accessToken === "string") {
       await StoreUser.TokenLogin(accessToken);
-      location.href = location.origin + process.env.BASE_URL + "#/";
+      location.href = urlDelete("accessToken");
       return;
     }
 

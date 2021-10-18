@@ -1,5 +1,5 @@
-import Vue from 'vue';
+import Vue from "vue";
 export default Vue.extend({
-  name: 'App',
+  name: "App",
   render: h => <router-view id="app"></router-view>
 });

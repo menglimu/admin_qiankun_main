@@ -32,25 +32,22 @@ export interface UserInfo {
 }
 
 function transformFuncs(funcs, pids = []) {
-  for (let i = 0; i < funcs.length; i++) {
+  const funcsTree: FunItem[] = [];
+  for (const item of funcs) {
     const info: FunItem = {
       expanded: true,
       helpUrl: "",
       leaf: false,
-      nodeType: { 101: 0, 102: 1, 103: 2, 104: 3 }[funcs[i].funType],
-      text: funcs[i].funName,
-      url: funcs[i].location,
-      id: funcs[i].id,
-      children: funcs[i].children
+      remark: item.remark,
+      nodeType: { 101: 0, 102: 1, 103: 2, 104: 3 }[item.funType],
+      text: item.funName,
+      url: item.location,
+      id: String(item.id),
+      children: item.children ? transformFuncs(item.children, [...pids, item.id]) : item.children
     };
-    Object.assign(info, funcs[i]);
-    info.id = String(funcs[i].id);
-    if (info.children) {
-      info.children = transformFuncs(info.children, [...pids, funcs[i].id]);
-    }
-    funcs[i] = info;
+    funcsTree.push(info);
   }
-  return funcs;
+  return funcsTree;
 }
 
 function transformUserInfo(userInfoBase): UserInfo {
@@ -253,6 +250,7 @@ class User extends VuexModule {
       const data = await logout();
       this.SET_TOKEN(null);
       this.SET_USERINFO(null);
+      window.appEventBus.$emit("logout");
       try {
         // location.href = data.url
         const { loginUrl, logoutType } = data;

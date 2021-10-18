@@ -1,9 +1,9 @@
 <script>
-import img_404 from '@/assets/404_images/404.png';
-import img_404_cloud from '@/assets/404_images/404_cloud.png';
+import img_404 from "@/assets/404_images/404.png";
+import img_404_cloud from "@/assets/404_images/404_cloud.png";
 
 export default {
-  name: 'UnFound',
+  name: "UnFound",
   data() {
     return {
       img_404,
@@ -12,7 +12,7 @@ export default {
   },
   computed: {
     message() {
-      return '说这个页面你不能进......???';
+      return "说这个页面你不能进......???";
     }
   },
   methods: {

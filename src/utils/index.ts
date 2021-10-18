@@ -115,7 +115,7 @@ export function GetQueryString(name: string) {
 
 // 查询url字符串中的值
 export function urlQuery(key: string, url = window.location.href) {
-  const search = url.match(/(?<=[?])(.*?)(?=[\b#])/g);
+  const search = url.match(/(?<=[?])(.*?)(?=($|#))/g);
   if (!search) return undefined;
   for (const item of search) {
     if (qs.parse(item)?.hasOwnProperty(key)) {
@@ -125,8 +125,7 @@ export function urlQuery(key: string, url = window.location.href) {
 }
 // 删除url中的某个值
 export function urlDelete(key: string, url = window.location.href) {
-  // replace(/(((?<=[?\b]))b=.*?((?=[\b#])|&))|(&b=.*?)(?=[\b&#])/g,'') // |(\?b=.*?(?=[\b#]))
-  return url.replace(new RegExp(`(((?<=[?\b]))${key}=.*?((?=[\b#\$])|&|$))|(&${key}=.*?)((?=[\b&#])|$)`, "g"), "");
+  return url.replace(new RegExp(`((?<=[?])${key}=.*?((?=#)|&|$))|(&${key}=.*?)((?=[&#])|$)`, "g"), "");
 }
 // url中添加一个值或多个值 // TODO: 已有值的处理，update
 export function urlAdd(obj: AnyObj, url = window.location.href) {

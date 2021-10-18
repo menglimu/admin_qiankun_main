@@ -1,6 +1,6 @@
 /* eslint-disable */
 function WS(opts) {
-  const ext = function () {
+  const ext = function() {
     let target = arguments[0] || {};
     let i = 1;
     let length = arguments.length;
@@ -9,12 +9,12 @@ function WS(opts) {
     let name;
     let src;
     let copy;
-    if (typeof target === 'boolean') {
+    if (typeof target === "boolean") {
       deep = target;
       target = arguments[1] || {};
       i = 2;
     }
-    if (typeof target !== 'object' && typeof target !== 'function') {
+    if (typeof target !== "object" && typeof target !== "function") {
       target = {};
     }
     if (length === i) {
@@ -29,8 +29,8 @@ function WS(opts) {
           if (target === copy) {
             continue;
           }
-          if (deep && copy && (typeof copy === 'object' || Array.isArray(copy)) && !copy.nodeType) {
-            const clone = src && (typeof src === 'object' || Array.isArray(src)) ? src : Array.isArray(copy) ? [] : {};
+          if (deep && copy && (typeof copy === "object" || Array.isArray(copy)) && !copy.nodeType) {
+            const clone = src && (typeof src === "object" || Array.isArray(src)) ? src : Array.isArray(copy) ? [] : {};
             target[name] = ext(deep, clone, copy);
           } else if (copy !== undefined) {
             target[name] = copy;
@@ -42,17 +42,17 @@ function WS(opts) {
   };
   opts = ext(
     {
-      url: '',
+      url: "",
       protocols: [],
       reconnect: true,
       reconnectInterval: 1000,
       reconnectDecay: 1.5,
       timeoutInterval: 10000,
-      onopen: function () {},
-      onclose: function () {},
-      onmessage: function () {},
-      onerror: function () {},
-      onconnecting: function () {},
+      onopen: function() {},
+      onclose: function() {},
+      onmessage: function() {},
+      onerror: function() {},
+      onconnecting: function() {},
       debug: false
     },
     opts || {}
@@ -61,12 +61,12 @@ function WS(opts) {
     this.url = opts.url;
   } else {
     if (/^https?:\/\/.*$/g.test(opts.url)) {
-      this.url = opts.url.replace(/^http/, 'ws');
-    } else if (opts.url.indexOf('/') === 0) {
-      this.url = window.location.protocol.replace(/^http/, 'ws') + '//' + window.location.host + opts.url;
+      this.url = opts.url.replace(/^http/, "ws");
+    } else if (opts.url.indexOf("/") === 0) {
+      this.url = window.location.protocol.replace(/^http/, "ws") + "//" + window.location.host + opts.url;
     } else {
-      this.url = window.location.href.replace(/^http/, 'ws');
-      this.url = this.url.substring(0, this.url.lastIndexOf('/') + 1) + opts.url;
+      this.url = window.location.href.replace(/^http/, "ws");
+      this.url = this.url.substring(0, this.url.lastIndexOf("/") + 1) + opts.url;
     }
   }
   this.protocols = opts.protocols;
@@ -78,14 +78,14 @@ function WS(opts) {
   let forcedClose = false;
   let timedOut = false;
 
-  const defaultTarget = 'SockJS';
-  if ('target' in opts && opts.target === 'SockJS') {
+  const defaultTarget = "SockJS";
+  if ("target" in opts && opts.target === "SockJS") {
     this.target = defaultTarget;
   } else {
-    if ('WebSocket' in window) {
-      this.target = 'WebSocket';
-    } else if ('MozWebSocket' in window) {
-      this.target = 'MozWebSocket';
+    if ("WebSocket" in window) {
+      this.target = "WebSocket";
+    } else if ("MozWebSocket" in window) {
+      this.target = "MozWebSocket";
     } else {
       this.target = defaultTarget;
     }
@@ -96,7 +96,7 @@ function WS(opts) {
       // return new window[defaultTarget](self.url.replace(/^ws/, 'http'), null, {
       //   protocols_whitelist: ['jsonp-polling']
       // })
-      console.log('Websocket is not supported in your browser');
+      console.log("Websocket is not supported in your browser");
     }
     return new window[self.target](self.url, self.protocols);
   }
@@ -107,23 +107,23 @@ function WS(opts) {
       opts.onconnecting();
     }
     if (opts.debug) {
-      console.log('WebSocket', 'attempt-connect', self.url);
+      console.log("WebSocket", "attempt-connect", self.url);
     }
 
     const localWs = ws;
-    const timeout = setTimeout(function () {
+    const timeout = setTimeout(function() {
       if (opts.debug) {
-        console.log('WebSocket', 'connection-timeout', self.url);
+        console.log("WebSocket", "connection-timeout", self.url);
       }
       timedOut = true;
       localWs.close();
       timedOut = false;
     }, opts.timeoutInterval);
 
-    ws.onopen = function (event) {
+    ws.onopen = function(event) {
       clearTimeout(timeout);
       if (opts.debug) {
-        console.log('WebSocket', 'onopen', self.url);
+        console.log("WebSocket", "onopen", self.url);
       }
       self.readyState = WS.OPEN;
       reconnectAttempt = false;
@@ -131,13 +131,13 @@ function WS(opts) {
       opts.onopen(event);
     };
 
-    ws.onclose = function (event) {
+    ws.onclose = function(event) {
       clearTimeout(timeout);
       ws = null;
       if ((event.code && !opts.reconnect) || forcedClose) {
         self.readyState = WS.CLOSED;
         if (opts.debug) {
-          console.log('WebSocket', 'onclose', self.url, event.code);
+          console.log("WebSocket", "onclose", self.url, event.code);
         }
         opts.onclose(event);
       } else {
@@ -145,7 +145,7 @@ function WS(opts) {
         opts.onconnecting();
         if (!reconnectAttempt && !timedOut) {
           if (opts.debug) {
-            console.log('WebSocket', 'onclose', self.url, event.code);
+            console.log("WebSocket", "onclose", self.url, event.code);
           }
           opts.onclose(event);
         }
@@ -153,14 +153,14 @@ function WS(opts) {
           self.target = defaultTarget;
           connect(false);
         } else {
-          setTimeout(function () {
+          setTimeout(function() {
             reconnectAttempts++;
             connect(true);
           }, opts.reconnectInterval * Math.pow(opts.reconnectDecay, reconnectAttempts));
         }
       }
     };
-    ws.onmessage = function (event) {
+    ws.onmessage = function(event) {
       let data = null;
       try {
         data = JSON.parse(event.data);
@@ -170,37 +170,37 @@ function WS(opts) {
         };
       }
       if (opts.debug) {
-        console.log('WebSocket', 'onmessage', self.url, data);
+        console.log("WebSocket", "onmessage", self.url, data);
       }
       opts.onmessage(data, event);
     };
-    ws.onerror = function (event) {
+    ws.onerror = function(event) {
       if (opts.debug) {
-        console.log('WebSocket', 'onerror', self.url, event);
+        console.log("WebSocket", "onerror", self.url, event);
       }
       opts.onerror(event);
     };
   }
   connect(false);
 
-  this.send = function (data) {
+  this.send = function(data) {
     if (ws) {
       if (opts.debug) {
-        console.log('WebSocket', 'send', self.url, data);
+        console.log("WebSocket", "send", self.url, data);
       }
       const type = typeof data;
-      if (type === 'undefined') {
-        data = 'null';
-      } else if (type !== 'string') {
+      if (type === "undefined") {
+        data = "null";
+      } else if (type !== "string") {
         data = JSON.stringify(data);
       }
       return ws.send(data);
     } else {
-      console.log('INVALID_STATE_ERR : Pausing to reconnect websocket');
+      console.log("INVALID_STATE_ERR : Pausing to reconnect websocket");
     }
   };
 
-  this.close = function () {
+  this.close = function() {
     forcedClose = true;
     this.refresh();
   };
@@ -209,7 +209,7 @@ function WS(opts) {
    * Additional public API method to refresh the connection if still open (close, re-open).
    * For example, if the app suspects bad data / missed heart beats, it can try to refresh.
    */
-  this.refresh = function () {
+  this.refresh = function() {
     if (ws) {
       ws.close();
     }

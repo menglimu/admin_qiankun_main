@@ -9,6 +9,7 @@ async function initial() {
   try {
     await casLogin();
   } catch (error) {
+    console.error(error);
     const page = await import("@/views/base/401");
     new Vue({
       render: h => h(page.default)

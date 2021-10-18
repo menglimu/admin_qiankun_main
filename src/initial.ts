@@ -16,6 +16,8 @@ import "@/icons"; // icon svg图标
 import "@/styles/common/index.scss";
 import "@/styles/index.scss"; // global css
 
+import "./qiankun";
+
 window.eventBus = window.eventBus || new Vue(); // eventBus
 window.appEventBus = window.appEventBus || new Vue(); // appEventBus
 declare module "element-ui" {

@@ -16,6 +16,7 @@ export interface FunItem {
   helpUrl?: string;
   icon?: string;
   leaf?: boolean;
+  remark?: string;
   // 0"顶级菜单", 1"节点", 2"叶子", 3"按钮"
   nodeType?: number;
   // 排序号
@@ -36,6 +37,8 @@ export interface MenuItem extends FunItem {
   pids?: string[];
   /** http为外部链接。点击直接跳转走。iframe为嵌入在系统中的外部链接 */
   urlType?: "http" | "iframe";
+  /** 主应用时，不能使用route进行一些路由的处理，在菜单中增加重定向 */
+  redirect?: string;
   /** 子菜单 */
   children?: MenuItem[];
 }
@@ -90,7 +93,8 @@ function isRoot(fun: FunItem) {
 }
 
 // type: http为外部链接。点击直接跳转走。iframe为嵌入在系统中的外部链接
-export function parseUrl(url: string): { url: string; urlType?: "http" | "iframe" } {
+export function parseUrl(fun: FunItem): { url: string; urlType?: "http" | "iframe" } {
+  const url = fun.url;
   if (/^https?:\/\//.test(url)) {
     return {
       url: "/http/" + window.btoa(url),
@@ -104,13 +108,13 @@ export function parseUrl(url: string): { url: string; urlType?: "http" | "iframe
       urlType: "http"
     };
   }
-  if (url.substring(0, 8) === "/iframe/") {
+  if (/^\/iframe\//.test(url)) {
     return {
       url: "/iframe/" + window.btoa(url.slice(8)),
       urlType: "iframe"
     };
   }
-  return { url };
+  return { url: url ? "/" + fun.remark + url : url };
 }
 
 // 找到第一个路由。首页重定向到这个地址
@@ -126,8 +130,6 @@ function findFirstRoute(menus: MenuItem[]) {
   }
 }
 
-let rootRoutes: RouteCustom[] = [];
-let layoutRoutes: RouteCustom[] = [];
 /** 将funs转换为route和menu */
 const toMenuRoute = function(funs: FunItem[], pids: string[]) {
   const menus: MenuItem[] = [];
@@ -144,24 +146,8 @@ const toMenuRoute = function(funs: FunItem[], pids: string[]) {
     }
     // fun2route,menu
     if (!isBtn(fun)) {
-      const { url, urlType } = parseUrl(fun.url);
-      // 按钮权限
-      const btns = fun.children?.filter(item => isBtn(item)).map(item => item.url) || [];
-      // 路由
-      const route: RouteCustom = {
-        // url为空的时候。路由会直接进到空这来。不会走父级的重定向。这里给空url写一个id作为path
-        path: url || "/" + fun.id,
-        // component: isExternal ? () => import('@/views/iframeTemplateEmpty/index') : () => import(`@/views${url}`),
-        component:
-          urlType === "iframe"
-            ? () => import(`@/views/base/iframe`)
-            : fun.url && urlType !== "http"
-            ? () => import(`@/views${fun.url}`)
-            : null,
-        name: fun.id,
-        meta: { pids, url: fun.url, btns, text: fun.text, icon: fun.icon, id: fun.id, cache: fun.cache },
-        redirect: null
-      };
+      const { url, urlType } = parseUrl(fun);
+
       // 菜单
       const menu: MenuItem = {
         ...fun,
@@ -172,51 +158,25 @@ const toMenuRoute = function(funs: FunItem[], pids: string[]) {
       if (fun.children?.length) {
         menu.children = toMenuRoute(fun.children, [...pids, fun.id]);
         // 重定向到第一个
-        route.redirect = findFirstRoute(menu.children);
-      }
-      if (fun.root) {
-        rootRoutes.push(route);
-      } else {
-        layoutRoutes.push(route);
+        menu.redirect = findFirstRoute(menu.children);
       }
       menus.push(menu);
     }
   });
   return menus.sort((a, b) => a.orderNo - b.orderNo);
-
-  // 加载本地路由中的child部分。这块逻辑有问题，业务无需求。先注释
-  // if (child.hasOwnProperty(menu.url)) {
-  //   [...child[menu.url]].forEach((c, i) => {
-  //     const id = `${menu.id}.${i}`;
-  //     c.meta = {
-  //       children: menu.children || [],
-  //       id,
-  //       pids: pids.concat(menu.id),
-  //       // hideMenu: true,
-  //       addTag: false,
-  //       text: c.name,
-  //       ...(c.meta || {})
-  //     };
-  //     menu.push(c);
-  //   });
-  // }
 };
 function createMenusRoutes(funs: FunItem[]) {
-  rootRoutes = [];
-  layoutRoutes = [];
   const menus = toMenuRoute(funs, []);
   const first = findFirstRoute(menus);
   // 入口路由
   const main: RouteCustom[] = [
     {
       path: "/",
-      component: !window.__POWERED_BY_QIANKUN__ ? () => import("@/layout/") : null,
-      children: layoutRoutes || [],
       redirect: first,
       meta: {}
-    },
-    ...rootRoutes
+    }
   ];
+
   router.addRoutes(main);
   StoreApp.SetMenus(menus);
 }

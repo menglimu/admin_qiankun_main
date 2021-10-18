@@ -2,7 +2,8 @@
  * @Author: wenlin
  * @Description: 顶部菜单
  */
-import { goLink } from "@/layout/common";
+import { getActiveMenu, goLink } from "@/layout/common";
+import { MenuItem } from "@/router/permission";
 import StoreApp from "@/store/modules/app";
 import Vue from "vue";
 import styles from "../../index.module.scss";
@@ -15,17 +16,23 @@ export default Vue.extend({
       this.$watch("$route", this.findSidebarMenu, { immediate: true });
     }
   },
+  data() {
+    return { activeMenu: null as MenuItem };
+  },
   methods: {
     // 查询左侧的菜单
     findSidebarMenu() {
-      const menu = StoreApp.menus.find(_ => _.id === this.$route.meta.pids[0]);
+      const activeMenu = getActiveMenu();
+      if (!activeMenu) return;
+      this.activeMenu = activeMenu;
+      const menu = StoreApp.menus.find(_ => _.id === this.activeMenu?.pids[0]);
       StoreApp.SetSidebarMenus(menu?.children || []);
     },
     handleRouteJump({ name }) {
       const menu = StoreApp.menus.find(_ => _.id === name);
       if (menu.urlType === "http") {
         // 外链的时候。将激活的还原为当前的路由
-        (this.$refs.tabs as any).setCurrentName(this.$route.meta?.pids?.[0] || this.$route.name);
+        (this.$refs.tabs as any).setCurrentName(this.activeMenu?.pids?.[0] || this.activeMenu?.id);
       }
       goLink(menu);
     }
@@ -35,7 +42,7 @@ export default Vue.extend({
     return (
       <el-tabs
         ref="tabs"
-        value={this.$route.meta?.pids?.[0] || this.$route.name}
+        value={this.activeMenu?.pids?.[0] || this.activeMenu?.id}
         class={[styles.topMenu, "topMenu"]}
         on={{ "tab-click": this.handleRouteJump }}
       >

@@ -4,6 +4,7 @@
  * vue-svg-icon 这个组件有问题，一些复杂的svg没有处理到，显示不了
  */
 import Vue from "vue";
+import { VNode } from "vue/types/umd";
 import "./index.scss";
 
 export default Vue.extend({
@@ -21,12 +22,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    iconName(this: any) {
+    iconName(): string {
       return this.name || this.iconClass;
     }
   },
   // render 中 第一层不返回 标签时，this取的有问题了
-  created(this: any) {
+  created() {
     this.$watch("iconName", this.requireIcon, { immediate: true });
   },
   methods: {
@@ -36,7 +37,7 @@ export default Vue.extend({
       }
     }
   },
-  render() {
+  render(): VNode {
     return this.iconName?.includes("el-icon") ? (
       <i class={[this.iconName, this.className]} on={this.$listeners} />
     ) : (

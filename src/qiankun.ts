@@ -1,24 +1,35 @@
 import { registerMicroApps, start } from "qiankun";
 import router from "@/router";
 import StoreUser from "./store/modules/user";
+import Layout from "@/layout";
 // import { initGlobalState, MicroAppStateActions } from 'qiankun'
 
-const apps = [
+export const apps = [
   {
-    name: "assessmentmanagement",
-    entry: process.env.NODE_ENV === "development" ? "http://localhost:8082/assessmentmanagement/" : null
+    name: "evaluation",
+    entry: process.env.NODE_ENV === "development" ? "http://localhost:8080/evaluation/" : null,
+    loaded: "0" // 0: 未加载   1: 加载中   2: 已加载  3: 加载失败
   },
   {
-    name: "systemsetting",
-    entry: process.env.NODE_ENV === "development" ? "http://localhost:8081/systemsetting/" : null
+    name: "riskengine",
+    entry: process.env.NODE_ENV === "development" ? "http://localhost:8081/riskengine/" : null,
+    loaded: "0"
   }
+  // {
+  //   name: "standingbookmanagement",
+  //   entry: process.env.NODE_ENV === "development" ? "http://localhost:8080/evaluation/" : null
+  // },
+  // {
+  //   name: "systemsetting",
+  //   entry: process.env.NODE_ENV === "development" ? "http://localhost:8080/evaluation/" : null
+  // }
 ];
 
 router.addRoutes(
   apps.map(item => ({
     name: item.name,
     path: `/${item.name}/*`,
-    component: () => import(/* webpackChunkName: "layout" */ "@/layout/index.vue"),
+    component: Layout,
     chunkName: "layout"
   }))
 );

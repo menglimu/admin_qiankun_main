@@ -1,36 +1,16 @@
 import Vue from "vue";
-import style from "./index.module.scss";
+import styles from "./index.module.scss";
 import Forget from "./components/forget";
-import { MlForm, MlFormConfig } from "@ml/ml-components/types/form";
 import StoreUser from "@/store/modules/user";
+import { Message } from "element-ui";
 export default Vue.extend({
   name: "Login",
   data() {
     return {
-      formConfig: null as MlFormConfig,
       formValue: {
         username: "",
         password: ""
       }
-    };
-  },
-  created() {
-    this.formConfig = {
-      inline: false,
-      size: "large",
-      uiType: "line",
-      labelWidth: "0",
-      columns: [
-        { prop: "username", placeholder: "用户名", required: true, error: "请输入注册手机号" },
-        {
-          prop: "password",
-          placeholder: "密  码",
-          type: "string",
-          props: { type: "password" },
-          required: true,
-          error: "请输入密码"
-        }
-      ]
     };
   },
   methods: {
@@ -38,11 +18,18 @@ export default Vue.extend({
       (this.$refs.forget as any).show(this.formValue?.username);
     },
     async onLogin() {
-      const form = this.$refs.form as MlForm;
-      await form.validate();
+      if (!this.formValue.username) {
+        Message.warning("请输入用户名");
+        return;
+      }
+      if (!this.formValue.password) {
+        Message.warning("请输入密码");
+        return;
+      }
       try {
-        await this.$store.dispatch("Login", this.formValue);
-        this.$router.push("/");
+        await StoreUser.Login(this.formValue);
+        // this.$router.push("/");
+        window.open("/", "_self");
       } catch (error) {
         console.error(error);
       }
@@ -50,13 +37,20 @@ export default Vue.extend({
   },
   render() {
     return (
-      <div class={style.login}>
-        <div class={style.box}>
-          <div class={style.name}></div>
-          <div class={style.formBox}>
-            <div class={style.title}>系统登录</div>
-            <ml-form ref="form" config={this.formConfig} v-model={this.formValue}></ml-form>
-            <el-button class={style.loginBtn} type="primary" size="large" onClick={this.onLogin}>
+      <div class={styles.login}>
+        <div class={styles.box}>
+          <div class={styles.name}></div>
+          <div class={styles.formBox}>
+            <div class={styles.title}>系统登录</div>
+            <el-input class={styles.input} placeholder="请输入用户名" v-model={this.formValue.username}>
+              <svg-icon icon-class="loginUser" class={styles.icon} slot="prefix" />
+            </el-input>
+            <div class={styles.errInfo}></div>
+            <el-input class={styles.input} placeholder="请输入密码" type="password" v-model={this.formValue.password}>
+              <svg-icon icon-class="loginPassword" class={styles.icon} slot="prefix" />
+            </el-input>
+            <div class={styles.errInfo}></div>
+            <el-button class={styles.loginBtn} type="primary" size="large" onClick={this.onLogin}>
               登录
             </el-button>
             {false && (

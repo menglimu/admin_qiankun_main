@@ -21,13 +21,13 @@
 
       &::before {
         display: block;
-        width: 24px;
-        height: 3px;
+        width: 12px;
+        height: 4px;
         margin: 0 auto;
         content: "";
         background: #fff;
-        border-radius: 3px;
-        transform: translateY(-12px);
+        border-radius: 2px;
+        transform: translateY(-16px);
       }
     }
 
@@ -47,7 +47,7 @@
   }
 }
 
-.leftMenu {
+.el-menu.leftMenuMain {
   border-right: none;
 
   .el-menu-item {
@@ -57,9 +57,13 @@
     color: #666;
     text-align: left;
 
+    *:first-child {
+      margin-left: 12px;
+    }
+
     &.is-active {
       color: $main;
-      background: rgba(55, 134, 253, 0.12);
+      background: rgba(55, 134, 253, 0.12) !important;
 
       &::before {
         position: absolute;
@@ -74,7 +78,8 @@
     }
 
     &:hover {
-      background: #e7f0fe;
+      color: $main;
+      background: none;
     }
   }
 
@@ -84,6 +89,15 @@
       font-size: 14px;
       line-height: 40px;
       color: #666;
+
+      *:first-child {
+        margin-left: 12px;
+      }
+
+      &:hover {
+        color: $main;
+        background: none;
+      }
     }
 
     .el-menu {
@@ -94,7 +108,8 @@
   .menu_icon {
     width: 20px;
     height: 20px;
-    margin-right: 16px;
+    margin-right: 5px;
+    margin-left: 8px !important;
     vertical-align: middle;
   }
 }

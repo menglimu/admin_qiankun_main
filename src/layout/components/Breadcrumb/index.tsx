@@ -1,7 +1,7 @@
 /**
  * 面包屑
  */
-import { goLink } from "@/layout/common";
+import { getActiveMenu, goLink } from "@/layout/common";
 import { MenuItem } from "@/router/permission";
 import StoreApp from "@/store/modules/app";
 import Vue from "vue";
@@ -14,26 +14,24 @@ export default Vue.extend({
       levelList: [] as MenuItem[]
     };
   },
-  watch: {
-    $route() {
-      this.getBreadcrumb();
-    }
-  },
   created() {
-    this.getBreadcrumb();
+    this.$watch("$route", this.getBreadcrumb, { immediate: true });
   },
   methods: {
     getBreadcrumb() {
-      this.levelList = []; // this.getList(StoreApp.menus, this.$route.name);
       let parent = StoreApp.menus;
-      [...this.$route.meta.pids, this.$route.name].forEach(id => {
+      const menu = getActiveMenu();
+      if (!menu) return;
+
+      this.levelList = [];
+      [...menu.pids, menu.id].forEach(id => {
         const menu = parent.find(item => item.id === id);
         this.levelList.push(menu);
         parent = menu.children || [];
       });
     },
     goLink(menu: MenuItem) {
-      if (!menu.url || menu.id === this.$route.name) {
+      if (!menu.url || menu.url === this.$route.path) {
         return;
       }
       goLink(menu);
@@ -62,15 +60,19 @@ export default Vue.extend({
     //   return false;
     // }
   },
-  render(this: any) {
+  render() {
     return (
       // this.hideBreadcrumb() ? null :
       <div class={styles.breadcrumb}>
         <el-breadcrumb separator="/">
-          {this.levelList.map(item => (
+          {this.levelList.map((item, index) => (
             <el-breadcrumb-item
               key={item.id}
-              class={{ [styles.disabled]: !item.url, [styles.active]: item.id === this.$route.name }}
+              class={{
+                [styles.disabled]: !item.url,
+                [styles.normal]: item.url,
+                [styles.active]: index === this.levelList.length - 1
+              }}
               nativeOnClick={() => this.goLink(item)}
             >
               {item.text}

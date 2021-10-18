@@ -30,7 +30,7 @@ class Dict extends VuexModule {
   }
 
   @Mutation
-  private isLoading(name: string, loading: boolean, loadPromise?: Promise<any>) {
+  private isLoading({ name, loading, loadPromise }: { name: string; loading: boolean; loadPromise?: Promise<any> }) {
     if (this.dicts[name]) {
       this.dicts[name].loading = loading;
     } else {
@@ -45,7 +45,7 @@ class Dict extends VuexModule {
    * @returns Promise
    */
   @Action
-  public async getDict(name: string, refresh?: boolean) {
+  public async getDict({ name, refresh }: { name: string; refresh?: boolean }) {
     // 正在请求的字典返回请求promise
     if (this.dicts[name]?.loading) return this.dicts[name]?.loadPromise;
     // 字典存在，并且不是强制刷新的时候，返回当前字典
@@ -67,9 +67,9 @@ class Dict extends VuexModule {
         return value;
       })
       .catch(err => {
-        this.isLoading(name, false);
+        this.isLoading({ name, loading: false });
       });
-    this.isLoading(name, true, loadPromise);
+    this.isLoading({ name, loading: true, loadPromise });
     return loadPromise;
   }
 
@@ -90,9 +90,9 @@ class Dict extends VuexModule {
         return value;
       })
       .catch(err => {
-        this.isLoading(name, false);
+        this.isLoading({ name, loading: false });
       });
-    this.isLoading(name, true, loadPromise);
+    this.isLoading({ name, loading: true, loadPromise });
     return loadPromise;
   }
 }

@@ -1,6 +1,6 @@
 import { updatePwdByCode } from "@/api/modules/login";
 import { REGS } from "@/utils/validate";
-import { MlForm, MlFormConfig } from "@ml/ml-components/types/form";
+import { MlForm, MlFormConfig } from "ml-component/types/form";
 import Vue from "vue";
 import Vcode from "./vcode";
 
@@ -13,9 +13,9 @@ export default Vue.extend({
       editValue: {
         userAccount: "",
         verifyCode: "",
-        newPassword: ""
+        newPassword: "",
       },
-      isShow: false
+      isShow: false,
     };
   },
   created() {
@@ -28,7 +28,7 @@ export default Vue.extend({
           label: "验证码",
           prop: "verifyCode",
           required: true,
-          render: () => <Vcode disabled={!this.editValue?.userAccount} phone={this.editValue?.userAccount} />
+          render: () => <Vcode disabled={!this.editValue?.userAccount} phone={this.editValue?.userAccount} />,
         },
         {
           label: "新密码",
@@ -41,11 +41,11 @@ export default Vue.extend({
             on: {
               input: value => {
                 this.editValue.newPassword = value.replace(/[^a-zA-Z1-9]/g, "");
-              }
-            }
-          }
-        }
-      ]
+              },
+            },
+          },
+        },
+      ],
     };
   },
   methods: {
@@ -65,7 +65,7 @@ export default Vue.extend({
       await updatePwdByCode(this.editValue);
       this.$message.success("修改成功");
       this.onCancel();
-    }
+    },
   },
   render() {
     return (
@@ -88,5 +88,5 @@ export default Vue.extend({
         </span>
       </el-dialog>
     );
-  }
+  },
 });

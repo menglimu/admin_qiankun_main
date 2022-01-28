@@ -1,9 +1,9 @@
 module.exports = {
   root: true,
   env: {
-    node: true,
+    node: true
   },
   globals: {},
-  extends: ["./node_modules/@ml/lint/.stylelintrc.js"],
-  rules: {},
+  extends: ["./node_modules/ml-lint/.stylelintrc.js"],
+  rules: {}
 };

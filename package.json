@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
-    "dev:qiankun": "vue-cli-service serve --mode prod",
     "build": "vue-cli-service build && ml-version",
-    "build:qiankun": "vue-cli-service build --mode prod && ml-version",
     "build:report": "vue-cli-service build --report",
     "lint": "vue-cli-service lint",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,less,md,vue}\"",

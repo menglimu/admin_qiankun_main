@@ -15,29 +15,29 @@ export const constantRouterMap = [
     redirect: "",
     component: () => import(/* webpackChunkName: "404" */ "@/views/base/404"),
     chunkName: "views/404",
-    hidden: true
+    hidden: true,
   },
   {
     name: "login",
     path: "/login",
     component: () => import(/* webpackChunkName: "login" */ "@/views/base/login"),
-    hidden: true
+    hidden: true,
   },
   {
     name: "*",
     path: "*",
     component: () => import(/* webpackChunkName: "404" */ "@/views/base/404"),
-    hidden: true
-  }
+    hidden: true,
+  },
 ];
 const router: Router = new Router({
   mode: "history", // 后端支持可开
   base: process.env.VUE_APP_BASEURL || "/",
   scrollBehavior: () => ({
     y: 0,
-    x: 0
+    x: 0,
   }),
-  routes: constantRouterMap
+  routes: constantRouterMap,
 });
 // 拦截路由，增加进度
 router.beforeEach((to, from, next) => {

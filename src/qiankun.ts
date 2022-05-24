@@ -5,16 +5,19 @@ import Layout from "@/layout";
 // import { initGlobalState, MicroAppStateActions } from 'qiankun'
 
 export const apps = [
+  // {
+  //   name: "evaluation",
+  //   entry: process.env.NODE_ENV === "development" ? "http://localhost:8080/evaluation/" : null,
+  //   loaded: "0" // 0: 未加载   1: 加载中   2: 已加载  3: 加载失败
+  // },
   {
-    name: "evaluation",
-    entry: process.env.NODE_ENV === "development" ? "http://localhost:8080/evaluation/" : null,
-    loaded: "0" // 0: 未加载   1: 加载中   2: 已加载  3: 加载失败
+    name: "basechat",
+    entry:
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:8081/basechat/"
+        : "http://vue-admin.shinianrj.top/basechat/",
+    loaded: "0",
   },
-  {
-    name: "riskengine",
-    entry: process.env.NODE_ENV === "development" ? "http://localhost:8081/riskengine/" : null,
-    loaded: "0"
-  }
   // {
   //   name: "standingbookmanagement",
   //   entry: process.env.NODE_ENV === "development" ? "http://localhost:8080/evaluation/" : null
@@ -30,7 +33,7 @@ router.addRoutes(
     name: item.name,
     path: `/${item.name}/*`,
     component: Layout,
-    chunkName: "layout"
+    chunkName: "layout",
   }))
 );
 
@@ -44,8 +47,8 @@ registerMicroApps(
       appBaseurl: process.env.VUE_APP_BASEURL,
       appName: process.env.VUE_APP_NAME,
       userInfo: StoreUser.userInfo,
-      accessToken: StoreUser.token
-    }
+      accessToken: StoreUser.token,
+    },
   }))
 );
 

@@ -98,23 +98,23 @@ export function parseUrl(fun: FunItem): { url: string; urlType?: "http" | "ifram
   if (/^https?:\/\//.test(url)) {
     return {
       url: "/http/" + window.btoa(url),
-      urlType: "http"
+      urlType: "http",
     };
   }
   // 外部链接可能不以http开头, 暂定以/http/的相对路径为外链
   if (/^\/http\//.test(url)) {
     return {
       url: "/http/" + window.btoa(url.slice(6)),
-      urlType: "http"
+      urlType: "http",
     };
   }
   if (/^\/iframe\//.test(url)) {
     return {
       url: "/iframe/" + window.btoa(url.slice(8)),
-      urlType: "iframe"
+      urlType: "iframe",
     };
   }
-  return { url: url ? "/" + fun.remark + url : url };
+  return { url };
 }
 
 // 找到第一个路由。首页重定向到这个地址
@@ -131,7 +131,7 @@ function findFirstRoute(menus: MenuItem[]) {
 }
 
 /** 将funs转换为route和menu */
-const toMenuRoute = function(funs: FunItem[], pids: string[]) {
+const toMenuRoute = function (funs: FunItem[], pids: string[]) {
   const menus: MenuItem[] = [];
   funs.forEach(fun => {
     // 处理目前后端不支持配置的几个项
@@ -153,7 +153,7 @@ const toMenuRoute = function(funs: FunItem[], pids: string[]) {
         ...fun,
         url,
         urlType,
-        pids
+        pids,
       };
       if (fun.children?.length) {
         menu.children = toMenuRoute(fun.children, [...pids, fun.id]);
@@ -168,13 +168,16 @@ const toMenuRoute = function(funs: FunItem[], pids: string[]) {
 function createMenusRoutes(funs: FunItem[]) {
   const menus = toMenuRoute(funs, []);
   const first = findFirstRoute(menus);
+  console.log(menus);
+
+  console.log(first);
   // 入口路由
   const main: RouteCustom[] = [
     {
       path: "/",
       redirect: first,
-      meta: {}
-    }
+      meta: {},
+    },
   ];
 
   router.addRoutes(main);

@@ -5,13 +5,12 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "dev:qiankun": "vue-cli-service serve --mode prod",
-    "build": "vue-cli-service build && node build/release.js",
-    "build:qiankun": "vue-cli-service build --mode prod  && node build/release.js",
+    "build": "vue-cli-service build && ml-version",
+    "build:qiankun": "vue-cli-service build --mode prod && ml-version",
     "build:report": "vue-cli-service build --report",
-    "release": "node build/release.js",
     "lint": "vue-cli-service lint",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,less,md,vue}\"",
-    "api": "node --loader ts-node/esm ./src/api/generate.ts"
+    "api": "ml-api http://test.xxx.com/offline"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -38,7 +37,8 @@
     "babel-plugin-lodash": "^3.3.4",
     "lint-staged": "^11.1.2",
     "lodash-webpack-plugin": "^0.11.6",
-    "ml-lint": "^1.2.3",
+    "ml-lint": "^1.2.4",
+    "ml-tools-dev": "^1.1.0",
     "sass": "~1.32.6",
     "sass-loader": "^8.0.2",
     "svg-sprite-loader": "^6.0.9",

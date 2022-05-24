@@ -1,6 +1,0 @@
-
-[production]
-10.12.102.194 nickname=nginx_01 ansible_user=hufei
-
-[test]
-10.12.102.195 nickname=nginx_01 ansible_user=hufei

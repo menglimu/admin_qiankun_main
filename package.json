@@ -8,7 +8,8 @@
     "build:report": "vue-cli-service build --report",
     "lint": "vue-cli-service lint",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,less,md,vue}\"",
-    "api": "ml-api http://test.xxx.com/offline"
+    "api": "ml-api http://test.xxx.com/offline",
+    "pkg-publish": "yarn build && ./ansible/publish.sh"
   },
   "dependencies": {
     "axios": "^0.21.1",

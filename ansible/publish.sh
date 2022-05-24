@@ -20,6 +20,7 @@ function deploy() {
   #echo "zip ~/$fileNewName $buildPath -r"
   #zip ~/$fileNewName $buildPath -r
 
+  execs "mkdir $path"
   execs "mkdir $path/$name"
   execs "tar -zcPf $path/$name.last.tar.gz $path/$name"
   send $cdir/$fileNewName $path

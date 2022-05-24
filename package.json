@@ -37,7 +37,7 @@
     "lint-staged": "^11.1.2",
     "lodash-webpack-plugin": "^0.11.6",
     "ml-lint": "^1.2.4",
-    "ml-tools-dev": "^1.1.0",
+    "ml-tools-dev": "^1.1.4",
     "sass": "~1.32.6",
     "sass-loader": "^8.0.2",
     "svg-sprite-loader": "^6.0.9",
